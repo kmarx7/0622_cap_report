@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Copy, Download, LoaderCircle, ScanText, Sparkles } from "lucide-react";
+import { ArrowDownNarrowWide, Copy, Download, LoaderCircle, ScanText, Sparkles } from "lucide-react";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { StepIndicator } from "@/components/layout/StepIndicator";
 import { OCRPanel } from "@/components/ocr/OCRPanel";
@@ -13,7 +13,7 @@ import { Card } from "@/components/ui/card";
 import { MockSummarizer } from "@/lib/ai/mock-summarizer";
 import { TesseractOCRProvider } from "@/lib/ocr/tesseract-provider";
 import { downloadMarkdown } from "@/lib/utils/markdown-download";
-import { reorderImages, sortImages } from "@/lib/utils/sort-images";
+import { autoSortImages, reorderImages, sortImages } from "@/lib/utils/sort-images";
 import type { UploadedImage } from "@/types/image";
 import type { OCRProgress, OCRResult } from "@/types/ocr";
 import type { SummaryMode, SummaryResult, TimelineItem } from "@/types/summary";
@@ -69,6 +69,16 @@ export default function WorkspacePage() {
     setSummary(undefined);
   };
 
+  const handleAutoSort = () => {
+    setImages((current) => autoSortImages(current, results));
+    setSummary(undefined);
+    setMessage(
+      Object.keys(results).length > 0
+        ? "이미지 속 시간, 파일명, 파일 수정 시각 순으로 자동 정렬했습니다."
+        : "파일명과 파일 수정 시각을 기준으로 자동 정렬했습니다. OCR 후 다시 실행하면 이미지 속 시간을 우선 적용합니다.",
+    );
+  };
+
   const runOCR = async () => {
     setIsExtracting(true); setMessage(undefined); setSummary(undefined);
     const provider = new TesseractOCRProvider();
@@ -80,7 +90,8 @@ export default function WorkspacePage() {
         nextResults[image.id] = await provider.recognize(image.id, image.file, setProgress);
         setResults({ ...nextResults });
       }
-      setMessage(`${orderedImages.length}개 이미지의 텍스트 추출을 완료했습니다.`);
+      setImages((current) => autoSortImages(current, nextResults));
+      setMessage(`${orderedImages.length}개 이미지의 텍스트 추출과 시간순 자동 정렬을 완료했습니다.`);
     } catch (error) {
       setMessage(error instanceof Error ? `OCR 오류: ${error.message}` : "OCR 처리 중 오류가 발생했습니다.");
     } finally { setIsExtracting(false); setProgress(undefined); }
@@ -118,7 +129,10 @@ export default function WorkspacePage() {
           <div className="min-w-0 space-y-6">
             <Card className="p-4 sm:p-6"><div className="mb-5"><h2 className="text-lg font-bold">1. 이미지 업로드</h2><p className="mt-1 text-sm text-slate-500">캡처 파일은 서버에 저장되지 않습니다.</p></div><ImageUploader onFiles={addFiles} disabled={isExtracting} /></Card>
             <Card className="p-4 sm:p-6">
-              <div className="mb-5 flex items-center justify-between"><div><h2 className="text-lg font-bold">2. 순서 정하기</h2><p className="mt-1 text-sm text-slate-500">핸들을 드래그해 문서 순서를 정하세요.</p></div><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">{images.length}장</span></div>
+              <div className="mb-4 flex items-start justify-between gap-3"><div><h2 className="text-lg font-bold">2. 순서 정하기</h2><p className="mt-1 text-sm leading-5 text-slate-500">자동 정렬 후 핸들을 드래그해 순서를 보정하세요.</p></div><span className="shrink-0 rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">{images.length}장</span></div>
+              <Button className="mb-4 w-full" type="button" variant="secondary" onClick={handleAutoSort} disabled={images.length < 2 || isExtracting}>
+                <ArrowDownNarrowWide className="size-4" />시간순 자동 정렬
+              </Button>
               {images.length > 0 ? <ImagePreviewList images={orderedImages} onReorder={handleReorder} onRemove={removeImage} disabled={isExtracting} /> : <p className="rounded-xl bg-slate-50 p-8 text-center text-sm text-slate-500">업로드한 이미지가 없습니다.</p>}
               <Button className="mt-5 w-full" size="lg" onClick={runOCR} disabled={images.length === 0 || isExtracting}>
                 {isExtracting ? <><LoaderCircle className="size-5 animate-spin" />OCR 처리 중 {progress ? `${Math.round(progress.progress * 100)}%` : ""}</> : <><ScanText className="size-5" />OCR 실행</>}
