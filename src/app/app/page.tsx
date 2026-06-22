@@ -107,17 +107,17 @@ export default function WorkspacePage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen overflow-x-hidden bg-slate-50">
       <AppHeader />
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-        <div className="mb-8"><p className="text-sm font-bold text-blue-600">Capture workspace</p><h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950">캡처 문서 만들기</h1><p className="mt-2 text-slate-600">이미지를 올리고 순서를 확인한 뒤 텍스트를 추출하세요.</p></div>
+      <div className="mx-auto w-full min-w-0 max-w-7xl px-3 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-6 sm:px-6 sm:py-8">
+        <div className="mb-6 px-1 sm:mb-8 sm:px-0"><p className="text-sm font-bold text-blue-600">Capture workspace</p><h1 className="mt-2 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">캡처 문서 만들기</h1><p className="mt-2 text-sm leading-6 text-slate-600 sm:text-base">이미지를 올리고 순서를 확인한 뒤 텍스트를 추출하세요.</p></div>
         <StepIndicator currentStep={currentStep} />
         {message && <div role="status" className="mt-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">{message}</div>}
 
-        <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-          <div className="space-y-6">
-            <Card className="p-5 sm:p-6"><div className="mb-5"><h2 className="text-lg font-bold">1. 이미지 업로드</h2><p className="mt-1 text-sm text-slate-500">캡처 파일은 서버에 저장되지 않습니다.</p></div><ImageUploader onFiles={addFiles} disabled={isExtracting} /></Card>
-            <Card className="p-5 sm:p-6">
+        <div className="mt-6 grid min-w-0 grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div className="min-w-0 space-y-6">
+            <Card className="p-4 sm:p-6"><div className="mb-5"><h2 className="text-lg font-bold">1. 이미지 업로드</h2><p className="mt-1 text-sm text-slate-500">캡처 파일은 서버에 저장되지 않습니다.</p></div><ImageUploader onFiles={addFiles} disabled={isExtracting} /></Card>
+            <Card className="p-4 sm:p-6">
               <div className="mb-5 flex items-center justify-between"><div><h2 className="text-lg font-bold">2. 순서 정하기</h2><p className="mt-1 text-sm text-slate-500">핸들을 드래그해 문서 순서를 정하세요.</p></div><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">{images.length}장</span></div>
               {images.length > 0 ? <ImagePreviewList images={orderedImages} onReorder={handleReorder} onRemove={removeImage} disabled={isExtracting} /> : <p className="rounded-xl bg-slate-50 p-8 text-center text-sm text-slate-500">업로드한 이미지가 없습니다.</p>}
               <Button className="mt-5 w-full" size="lg" onClick={runOCR} disabled={images.length === 0 || isExtracting}>
@@ -127,15 +127,15 @@ export default function WorkspacePage() {
             </Card>
           </div>
 
-          <div className="space-y-6">
-            <Card className="p-5 sm:p-6"><div className="mb-5"><h2 className="text-lg font-bold">3. OCR 결과</h2><p className="mt-1 text-sm text-slate-500">감지한 시간 정보와 정제된 텍스트입니다.</p></div><OCRPanel images={orderedImages} results={results} /></Card>
-            <Card className="p-5 sm:p-6">
+          <div className="min-w-0 space-y-6">
+            <Card className="p-4 sm:p-6"><div className="mb-5"><h2 className="text-lg font-bold">3. OCR 결과</h2><p className="mt-1 text-sm text-slate-500">감지한 시간 정보와 정제된 텍스트입니다.</p></div><OCRPanel images={orderedImages} results={results} /></Card>
+            <Card className="p-4 sm:p-6">
               <div className="mb-5"><h2 className="text-lg font-bold">4. AI 문서 정리</h2><p className="mt-1 text-sm text-slate-500">현재는 API 키가 필요 없는 로컬 mock summarizer를 사용합니다.</p></div>
               <div className="mb-4 flex flex-wrap gap-2">{modes.map((item) => <button key={item.value} type="button" onClick={() => setMode(item.value)} className={`rounded-full px-3 py-2 text-sm font-semibold transition ${mode === item.value ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}`}>{item.label}</button>)}</div>
               <Button className="w-full" size="lg" onClick={runSummary} disabled={Object.keys(results).length === 0 || isExtracting || isSummarizing}>{isSummarizing ? <LoaderCircle className="size-5 animate-spin" /> : <Sparkles className="size-5" />}AI 정리 실행</Button>
             </Card>
-            <Card className="p-5 sm:p-6">
-              <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><h2 className="text-lg font-bold">5. 최종 결과</h2><p className="mt-1 text-sm text-slate-500">복사하거나 Markdown 파일로 저장하세요.</p></div><div className="flex gap-2"><Button variant="secondary" size="sm" onClick={copyMarkdown} disabled={!summary}><Copy className="size-4" />복사</Button><Button variant="secondary" size="sm" onClick={() => summary && downloadMarkdown(summary.markdown)} disabled={!summary}><Download className="size-4" />다운로드</Button></div></div>
+            <Card className="p-4 sm:p-6">
+              <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><h2 className="text-lg font-bold">5. 최종 결과</h2><p className="mt-1 text-sm text-slate-500">복사하거나 Markdown 파일로 저장하세요.</p></div><div className="grid grid-cols-2 gap-2 sm:flex"><Button className="w-full" variant="secondary" size="sm" onClick={copyMarkdown} disabled={!summary}><Copy className="size-4" />복사</Button><Button className="w-full" variant="secondary" size="sm" onClick={() => summary && downloadMarkdown(summary.markdown)} disabled={!summary}><Download className="size-4" />다운로드</Button></div></div>
               <SummaryPanel result={summary} />
             </Card>
           </div>

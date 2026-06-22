@@ -12,11 +12,11 @@ export default function LandingPage() {
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0,transparent_42%)]">
       <AppHeader />
-      <section className="mx-auto max-w-6xl px-4 pb-20 pt-20 text-center sm:px-6 sm:pt-28">
-        <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/80 px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm"><ShieldCheck className="size-4" />이미지는 브라우저 밖으로 전송되지 않습니다</div>
-        <h1 className="mx-auto mt-8 max-w-4xl text-4xl font-black tracking-tight text-slate-950 sm:text-6xl">캡처 이미지를<br /><span className="text-blue-600">시간순 AI 노트로</span></h1>
+      <section className="mx-auto max-w-6xl px-4 pb-16 pt-14 text-center sm:px-6 sm:pb-20 sm:pt-28">
+        <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/80 px-3 py-2 text-xs font-semibold text-blue-700 shadow-sm sm:px-4 sm:text-sm"><ShieldCheck className="size-4 shrink-0" />이미지는 브라우저 밖으로 전송되지 않습니다</div>
+        <h1 className="mx-auto mt-7 max-w-4xl text-4xl font-black tracking-tight text-slate-950 sm:mt-8 sm:text-6xl">캡처 이미지를<br /><span className="text-blue-600">시간순 AI 노트로</span></h1>
         <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">여러 장의 스크린샷을 업로드하면 이미지 속 문자와 자막을 추출하고, AI가 정리된 문서로 변환합니다.</p>
-        <Link href="/app" className="mt-9 inline-flex h-13 items-center gap-2 rounded-xl bg-blue-600 px-7 font-bold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700">시작하기 <ArrowRight className="size-5" /></Link>
+        <Link href="/app" className="mt-9 inline-flex h-13 w-full max-w-xs items-center justify-center gap-2 rounded-xl bg-blue-600 px-7 font-bold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 sm:w-auto">시작하기 <ArrowRight className="size-5" /></Link>
       </section>
       <section className="mx-auto grid max-w-6xl gap-5 px-4 pb-24 sm:px-6 md:grid-cols-3">
         {features.map(({ icon: Icon, title, description }, index) => (

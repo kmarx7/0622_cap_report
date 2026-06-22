@@ -22,7 +22,7 @@ export function ImageUploader({ onFiles, disabled }: ImageUploaderProps) {
       <div
         {...getRootProps()}
         className={cn(
-          "group cursor-pointer rounded-2xl border-2 border-dashed px-6 py-12 text-center transition",
+          "group cursor-pointer rounded-2xl border-2 border-dashed px-4 py-9 text-center transition sm:px-6 sm:py-12",
           isDragActive ? "border-blue-500 bg-blue-50" : "border-slate-300 bg-slate-50 hover:border-blue-400 hover:bg-blue-50/60",
           disabled && "cursor-not-allowed opacity-60",
         )}
@@ -31,8 +31,8 @@ export function ImageUploader({ onFiles, disabled }: ImageUploaderProps) {
         <span className="mx-auto mb-4 grid size-12 place-items-center rounded-2xl bg-white text-blue-600 shadow-sm">
           <ImagePlus className="size-6" />
         </span>
-        <p className="font-semibold text-slate-900">이미지를 끌어놓거나 클릭해 선택하세요</p>
-        <p className="mt-2 text-sm text-slate-500">JPG, PNG, WEBP · 여러 장 동시 업로드 가능</p>
+        <p className="font-semibold text-slate-900"><span className="sm:hidden">사진을 촬영하거나 앨범에서 선택하세요</span><span className="hidden sm:inline">이미지를 끌어놓거나 클릭해 선택하세요</span></p>
+        <p className="mt-2 text-sm text-slate-500">JPG, PNG, WEBP · 여러 장 선택 가능</p>
         <p className="mt-4 inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700">
           <ShieldCheck className="size-4" /> 브라우저 안에서만 처리됩니다
         </p>

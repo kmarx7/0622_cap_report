@@ -11,7 +11,7 @@ export function AppHeader() {
           </span>
           CaptureFlow AI
         </Link>
-        <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">Local MVP</span>
+        <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700 sm:px-3 sm:text-xs">Local MVP</span>
       </div>
     </header>
   );
